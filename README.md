@@ -1,4 +1,7 @@
 # Dart 문법 노트
+## 출처
+> **참고한 교재** : [ebook 다트&플러터](https://ibit.ly/8khe)
+
 ## 01 키워드
 ### 내장 식별자
 |  **abstract**  | **implements** |    **as**    |  **import**  |
@@ -785,6 +788,320 @@ null 체크를 편하게 해주는 연산자이다.
     }
     _sleep() {
       print('sleap');
+    }
+  }
+```
+
+
+## 11 getter와 setter
+### 1. getter와 setter의 기본
+getter는 멤버 변수의 값을 가져오는 역할을 한다.
+setter는 값을 쓰는 역할을 한다.
+다트에서는 getter와 setter 메서드를 각각 get과 set이라는 키워드로 사용한다.
+``` dart
+  class Person {
+    String _name;
+    String get name => _name;
+    set name(String name) => _name = name;
+  }
+  
+  main() {
+    Person person = Person();
+    person.setName = 'Kim';
+    print(person.name);
+  }
+```
+### 2. getter와 setter의 활용
+만약 _name이 null이 되지 않아야 하는 경우라면 getter와 setter을 다음과 같이 활용할 수 있다.
+``` dart
+    main() {
+      Person person = Person();
+      print(person.name);
+      pserson.name = null;
+      print(person.name);
+    }
+    
+    class Person {
+      String _name;
+    
+      String get name => (_name == null) ? 'Lee' : _name;
+    
+      set name(String name) => (_name == null) ? name = 'Park' : _name = name;
+    }
+```
+## 12 추상 클래스
+### 1. 추상 클래스
+추상 클래스는 추상 메서드를 가질 수 있는 클래스이다.
+추상 메서드를 필수적으로 포함해야 하는 것은 아니다.
+일반 클래스는 추상 메서드를 선언할 수 없다.
+추상 클래스는 기존 클래스 앞에 abstract 키워드를 붙여서 표현한다.
+``` dart
+  abstract class Person {
+    eat();
+  }
+```
+추상 클래스는 객체를 생성할 수 없다.
+추상 클래스를 사용하기 위해서는 일반 클래스의 implements 키워드로 임플리먼트한 후에 반드시 추상 메서드를 오버라이딩해야 한다.
+``` dart
+  main() {
+    Person person = Developer();
+    person.eat();
+  }
+  
+  abstract class Person {
+    eat();
+  }
+  
+  class Developer implements Person {
+    @override
+    eat() {
+      print('Developer eat a meal');
+    }
+  }
+```
+### 2. 일반 메서드를 포함하는 추상 클래스
+다트는 일반 메서드를 정의할 수도 있고 일반 메서드만 존재할 수도 있다.
+일반 메서드도 반드시 임플리먼트하는 클래스에서 재정의되어야 한다. 
+그리고 추상 메서드든 일반 메서드든 임플리먼트 하는 클래스에서 @override 어노테이션 생략이 가능하다.
+``` dart
+  main() {
+    Person person = Developer();
+    person.eat();
+  }
+  
+  abstract class Person {
+    eat();
+  
+    sleep() {
+      print('Person must sleep');
+    }
+  }
+  
+  class Developer implements Person {
+    @override
+    eat() {
+      print('Person eat a meal');
+    }
+  
+    sleep() {
+      print('Person must sleep');
+    }  
+  }
+```
+### 3. 여러 추상 클래스의 임플리먼트
+``` dart
+  main() {
+    Developer person = Developer();
+    person.eat();
+    person.sleep();
+    person.work();
+  }
+  
+  abstract class Person {
+    eat();
+  
+    sleep() {
+      print('Person must sleep');
+    }
+  }
+  
+  abstract class Junior {
+    work() {
+      print('work hard');
+    }
+  }
+  
+  class Developer implements Person, Junior {
+    @override
+    eat() {
+      print('Developer eat a meal');
+    }
+    sleep() {
+      print('Developer must sleep');
+    }
+    work() {
+      print('Junior developer works hard');
+    }
+  }
+```
+### 4. 정리
+> 추상 클래스와 추상 메서드는 abstract 키워드를 사용하다.
+> 추상 클래스는 참조형 변수의 타입으로 사용할 수 있다.
+> 추상 클래스는 임플리먼트 할 때 반드시 메서드를 오버라이딩해야 한다.
+> 추상 클래스에 추상 메서드만 존재하는 것은 아니다.
+> 메서드 오버라이딩 시 @override 어노테이션은 생략 가능하다.
+## 13 컬렉션
+다트에서는 세 가지 컬렉션을 제공한다.
+> List : 데이터 순서가 있고 중복 허용된다.
+> Set : 데이터 순서가 없고 중복 허용하지 않는다.
+> Map : key와 value으로 구성되며, key는 중복이 허용되지 않고 value은 중복 허용된다.
+### 1. List
+List는 여러 개의 데이터를 담을 수 있는 자료구조이다.
+List에 데이터를 담을 때 순서를 가지기 때문에 배열을 대체할 수 있고 데이터에 순차적으로 접근하기 쉽다.
+``` dart
+  List <데이터 타입> 변수명 = [데이터1, 데이터2, 데이터3, ....];
+  또는
+  List <데이터 타입> 변수명 = List();
+  변수명.add(데이터1);
+  변수명.add(데이터2);
+  변수명.add(데이터3);
+  
+  ex)
+  List<String> colors = ['red', 'orange', 'yellow'];
+  또는
+  List<String> colors = List();
+  colors.add('red');
+  colors.add('orange');
+  colors.add('yellow');
+```
+**List 주요 메서드와 프로퍼티**
+> indexOf(요소) : 요소의 인덱스 값
+> add(데이터) : 데이터 추가
+> addAll([데이터1, 데이터2]) : 여러 데이터 추가
+> remove(요소) : 요소 삭제
+> removeAt(인덱스) : 지정한 인덱스의 요소 삭제
+> contains(요소) : 요소가 포함되었으면 true, 아니면 false
+> clear() ; 리스트 요소 전체 삭제
+> sort() : 리스트 요소 정렬
+> first : 리스트 첫 번째 요소
+> last : 리스트 마지막 요소
+> reversed : 리스트 요소 역순
+> isNotEmpty : 리스트가 비어 있지 않으면 true, 비었으면 false
+> isEmpty : 리스트가 비었으면 true, 비어있지 않으면 false
+> single : 리스트에 단 1개의 요소만 있다면 해당 요소 리턴
+### 2. Set
+Set은 List처럼 데이터를 여러 개 담을 수 있는 자료구조이다. 하지만 데이터의 순서가 없고 중복된 요소를 허용하지 않는다.
+``` dart
+  Set <데이터 타입> 변수명 = { 데이터1, 데이터2, 데이터3, .... };
+  또는
+  Set <데이터 타입> 변수명 = Set();
+  변수명.add(데이터1);
+  변수명.add(데이터2);
+  변수명.add(데이터3);
+  
+  ex)
+  Set<String> colors = { 'red', 'orange', 'yellow' };
+  또는
+  Set<String> colors = Set();
+  colors.add('red');
+  colors.add('orange');
+  colors.add('yellow');
+```
+Set **주요 메서드와 프로퍼티**
+> add(데이터) : 데이터 추가
+> addAll([데이터1, 데이터2]) : 여러 데이터 추가
+> remove(요소) : 요소 삭제
+> contains(요소) : 요소가 포함되었으면  true, 아니면 false
+> clear() ; Set 요소 전체 삭제
+> first : Set 첫 번째 요소
+> last : Set 마지막 요소
+> isNotEmpty : Set가 비어 있지 않으면 true, 비었으면 false
+> isEmpty : Set가 비었으면 true, 비어있지 않으면 false
+> single : Set에 단 1개의 요소만 있다면 해당 요소 리턴
+Set는 순서를 가지지 않기 때문에 순서와 관련된 메서드와 프로퍼티는 사용하지 못한다.
+> indexOf()
+> removeAt()
+> sort()
+> reversed()
+### 3. Map
+Map은 key와 value로 이뤄지고 key와 value는 한 쌍으로 이뤄진다. 
+key에 대한 값이 1 대 1로 매칭되어 있어서 빠른 탐색이 가능하다.
+Map은 순서를 가지지 않지만 key를 정수로 설정하면 순서를 가진 것처럼 사용할 수도 있다.
+key는 중복이 불가능하고 value는 중복이 가능하다.
+Map에서 key에 대한 value의 맵핑을 새로운 value로 변경하려면 update() 메서드를 이용하면 된다.
+``` dart
+  Map<key 타입, value 타입> 변수명 = {
+    key1 : value1,
+    key2 : value2,
+    key3 : value3
+  };
+  또는
+  Map<key 타입, value 타입> 변수명 = Map();
+  변수명[1] = key1;
+  변수명[2] = key2;
+  변수명[3] = key3;
+  
+  ex)
+  Map<int, String> testMap = {
+    1 : 'value1',
+    2 : 'value2',
+    3 : 'value3'
+  };
+  
+  testMap.update(1, (value) => 'NewValue1', ifAbsent: () => 'NewKey1');
+  testMap.update(5, (value) => 'NewValue5', ifAbsent: () => 'NewKey5');
+  
+  또는
+  Map<int, String> testMap = Map();
+  testMap[1] = 'value1';
+  testMap[2] = 'value2';
+  testMap[3] = 'value3';
+  
+  testMap.update(1, (value) => 'NewValue1', ifAbsent: () => 'NewKey1');
+  testMap.update(5, (value) => 'NewValue5', ifAbsent: () => 'NewKey5');
+```
+## 14 제네릭
+제네릭은 타입 매개변수를 통해 다양한 타입에 대한 유연한 대처가 가능하다.
+제네릭의 대표적인 예가 List, Set, Map이다.
+### 1. 타입 매개변수
+타입 매개변수는 인자 값을 전달하는 것이 아니라 타입을 전달한다.
+``` dart
+  abstract class List<E> implements EfficientLengthIterable<E> {
+  // <E>의 E는 형식 타입 매개변수라고 한다.
+  ...
+  void add(E value);
+  ...
+  }
+```
+### 2. 매개변수화 타입을 제한하기
+제네릭을 사용할 때 매개변수화 타입을 제한할 수도 있다.
+타입 매개변수에 extends를 사용해서 특정 클래스를 지정하면 된다. 그러면 해당 특정 클래스와 그 클래스의 자식 클래스가 실제 타입 매개변수가 될 수 있는 것이다.
+``` dart
+  void main() {
+    var manager1 = Manager<Person>();
+    manager1.eat();
+    var manager2 = Manager<Student>();
+    manager2.eat();
+    var manager3 = Manager();
+    manager3.eat();
+  }
+  
+  class Person {
+    eat() {
+      print('Person eats a food');
+    }
+  }
+  
+  class Student extends Person {
+    eat() {
+      print('Student eats a hambuger');
+    }
+  }
+  
+  class Mananger<T extends Person> {
+    eat() {
+      print('Manager eats a sandwich');
+    }
+  }
+  
+  class Dog {
+    eat() {
+      print('Dog eats a dog food');
+    }
+  }
+```
+### 3. 제너릭 메서드
+제네릭은 클래스뿐만 아니라 메서드에도 사용할 수 있다.
+메서드의 리턴 타입, 매개변수를 제네릭으로 지정할 수 있다.
+``` dart
+  void main() {
+    var person = Person();
+    print(person.getName<String>('Kim'));
+  }
+  
+  class Person {
+    T getName<T> (T param) {
+      return param;
     }
   }
 ```
