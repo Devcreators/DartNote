@@ -63,7 +63,7 @@
 | **double**  | 실수                                  |
 | **string**  | 문자열                                |
 |  **bool**   | true 또는 false를 가지는 Boolean type |
-|   **var**   | 타입 미지정 및 타입 변경 불가         |
+|   **var**   | 타입 미지정 및 타입 변경 가능(불가능한 경우도 있음)         |
 | **dynamic** | 타입 미지정 및 타입 변경 가능         |
 |  **list**   | dart의 array는 list로 대체            |
 |   **set**   | 순서가 없고 중복 없는 collection      |
@@ -71,7 +71,15 @@
 ### 변수
 ``` dart
   main() {
-    var number = 10;
+    var number = 10; // 타입 변경 불가능
+    
+    var num2; //  변경 가능
+    num2 = '숫자형';
+    print('The num2 is $num2.'); // 숫자형
+    
+    num3 = 1;
+    print('The num2 is $num2.'); // 1
+    
     Object balanceA = 1000;
     dynamic balanceB = 2000;
     print('The number is $number.');
